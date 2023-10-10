@@ -1,15 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import "@fontsource/space-mono";
+import "@fontsource/orbitron"
 import reportWebVitals from './reportWebVitals';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {ConnectWallet} from "./pages/ConnectWallet/ConnectWallet";
+import {CreateHero} from "./pages/CreateHero/CreateHero";
+
+const router = createBrowserRouter([
+    {
+        path: "/connect-wallet",
+        element: <ConnectWallet />
+    },
+    {
+        path: "/create-hero",
+        element: <CreateHero />
+    }
+]);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
