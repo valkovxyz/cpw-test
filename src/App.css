@@ -73,7 +73,8 @@ body {
 .main {
     display: flex;
     width: 100%;
-    height: 100%;
+    height: 700px;
+    margin-top: 70px;
     background-image: url("assets/img/bg.png");
     background-repeat: no-repeat;
     background-position: center;
@@ -83,8 +84,7 @@ body {
 
 .box {
     width: 502px;
-    height: 509px;
-    margin-top: 60px;
+    height: 524px;
     flex-shrink: 0;
     background-color: #141B28;
     border-radius: 20px;
@@ -114,7 +114,7 @@ body {
 }
 
 .box_section {
-    margin: 20px;
+    margin: 10px 20px;
     padding-bottom: 10px;
     border-bottom: 1px solid #222C3D ;
 }
@@ -127,10 +127,24 @@ body {
     line-height: 10px;
 }
 
+.box_button_info {
+    cursor: pointer;
+    display: flex;
+    width: 400px;
+    height: 20px;
+    padding: 8px 30px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 12px;
+    background: #222C3D;
+    margin: 0 auto;
+}
+
 .box_input {
     display: flex;
-    height: 20px;
-    width: 150px;
+    height: 30px;
+    width: 175px;
     padding: 12px 24px;
     align-items: center;
     gap: 10px;
@@ -145,7 +159,7 @@ body {
     line-height: 24px;
 }
 
-.box_input-health {
+.box_input_buttons {
     display: flex;
     gap: 20px;
 }
@@ -180,7 +194,7 @@ body {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin: 0 auto 20px auto;
+    margin: 20px auto;
 }
 
 .box_step_dot {
@@ -191,7 +205,19 @@ body {
 }
 
 .box_balance {
+    display: flex;
+    justify-content: space-between;
     margin-top: 10px;
+    height: 28px;
+    width: 436px;
+    padding: 0 12px;
+    gap: 16px;
+}
+
+.box_balance_box {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
 .full {
@@ -199,7 +225,7 @@ body {
 }
 
 .box_title {
-    width: 400px;
+    width: 80%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -291,20 +317,64 @@ body {
     fill: red !important;
 }
 
+.row {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+}
+
+.box_section_column {
+    width: 462px;
+}
+
+.box_section_content {
+    height: 200px;
+    display: flex;
+}
+
+.box_coming_soon {
+    height: 195px;
+    width: 420px;
+}
+
+.box_section_heroes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7.5px 10px;
+    width: 300px;
+    margin-right: 46px;
+}
+
 .primary {
     background-color:  #7EFADD;
     color: #222C3D;
-    width: 175px;
+    width: 176px;
     height: 56px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+.box_balance_value {
+    color: #7EFADD;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28px;
+}
+
+.box_description {
+    color:  #FFF;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+}
+
 .secondary {
     background-color: #222C3D;
     color: #7EFADD;
-    width: 175px;
+    width: 176px;
     height: 56px;
     display: flex;
     justify-content: center;
@@ -313,4 +383,23 @@ body {
 
 .done {
     background-color: #7EFADD;
+}
+
+.wallet {
+    height: 553px;
+}
+
+.large {
+    width: 964px;
+    height: 515px;
+}
+
+.wide {
+    width: 90%;
+}
+
+.hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
