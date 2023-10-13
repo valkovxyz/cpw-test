@@ -18,7 +18,7 @@ export const ConnectWallet: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (window.ethereum.isConnected()) {
+        if (window.ethereum) {
             setWalletAddress(localStorage.getItem('wallet'))
         }
         if (walletAddress) {

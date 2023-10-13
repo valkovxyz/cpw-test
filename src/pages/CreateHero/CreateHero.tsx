@@ -51,7 +51,6 @@ export const CreateHero: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log(window.ethereum.isConnected())
     if (!localStorage.getItem('wallet')) {
       navigate('connect-wallet')
     }
@@ -66,7 +65,7 @@ export const CreateHero: React.FC = () => {
         setWalletBalance(formattedBalance)
       });
     }
-  }, [sessionWallet, window.ethereum.isConnected()]);
+  }, [sessionWallet, window.ethereum]);
 
   const createHero = async () => {
     setIsLoading(true)

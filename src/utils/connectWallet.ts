@@ -6,7 +6,7 @@ export const connectWallet: ConnectWalletFunction = async () => {
       throw new Error('MetaMask not detected. Please install MetaMask.');
     }
 
-    if (window.ethereum.isConnected()) {
+    if (window.ethereum) {
       localStorage.setItem('wallet', window.ethereum.selectedAddress);
     } else {
       localStorage.removeItem('wallet')
