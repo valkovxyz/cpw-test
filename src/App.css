@@ -472,6 +472,7 @@ body {
     display: flex;
     width: 195px;
     flex-direction: column;
+    z-index: 100;
     align-items: flex-start;
     gap: 8px;
     border-radius: 0 0 12px 12px;
