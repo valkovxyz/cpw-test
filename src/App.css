@@ -93,7 +93,7 @@ body {
 
 .box_logo {
     position: absolute;
-    top: 46%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -175,6 +175,7 @@ body {
     color: #7EFADD;
     font-size: 40px;
     line-height: 0;
+    cursor: pointer;
 }
 
 .box_input:focus {
@@ -410,7 +411,7 @@ body {
     width: 100vw;
     height: 100vh;
     z-index: 100;
-    margin-top: -180px;
+    top: 0px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -438,7 +439,6 @@ body {
 
 .header_wallet_dropdown {
     display: flex;
-    height: 30px;
     padding: 8px 16px;
     align-items: center;
     gap: 10px;
@@ -448,10 +448,15 @@ body {
     color: #7EFADD;
     font-size: 12px;
     font-weight: 400;
+    position: relative;
+    border: 1px solid #222C3D;
 }
 
 .dropdown_open {
     border-radius: 12px 12px 0 0;
+    border-left: 1px solid #222C3D;
+    border-right: 1px solid #222C3D;
+    border-bottom: 1px solid #222C3D;
 }
 
 .dropdown_icon {
@@ -462,19 +467,96 @@ body {
 
 .dropdown_menu {
     position: absolute;
-    top: 113px;
-    right: 52px;
+    top: 40px;
+    right: -1px;
     display: flex;
-    width: 193px;
+    width: 195px;
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
     border-radius: 0 0 12px 12px;
-    border: 1px solid #222C3D;
+    border-top: none;
+    border-left: 1px solid #222C3D;
+    border-right: 1px solid #222C3D;
+    border-bottom: 1px solid #222C3D;
     background: #141B28;
-    backdrop-filter: blur(5px);
+}
+
+.dropdown_section {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 0 0 0 15px;
+    padding: 10px 0 3px 0;
+    border-top: 1px solid #222C3D;
+    width: 170px;
+}
+
+.dropdown_item {
+    display: flex;
+    align-items: center;
+    height: 24px;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.dropdown_item_text {
+    font-family: "Space Mono", serif;
+    color: #7EFADD;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
 }
 
 .box_modal {
     height: auto;
+}
+
+.sidebar {
+    position: absolute;
+    width: 300px;
+    right: 0px;
+    height: 100vh;
+    top: 0px;
+    z-index: 100;
+    background-color: #222C3D;
+}
+
+.button_metamask {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 10px;
+    margin: 20px;
+    border: 1px solid #70718A;
+    border-radius: 12px;
+    cursor: pointer;
+    gap: 20px;
+}
+
+.button_metamask_title {
+    color: #ffffff;
+    text-align: center;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28px;
+}
+
+.metamask_icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+}
+
+.sidebar_close_button {
+    width: 30px;
+    display: flex;
+    margin: 20px;
+    cursor: pointer;
+}
+
+.header_avatar {
+    height: 40px;
 }

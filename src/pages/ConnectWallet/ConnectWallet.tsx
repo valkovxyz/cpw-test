@@ -1,36 +1,35 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate } from 'react-router-dom';
 import Layout from "../../components/layout";
 import connectImage from '../../assets/connect-image.png'
 import cyberpunksworld  from '../../assets/cyberpunksworld.svg';
+import metamask from '../../assets/metamask.svg'
 import {Button} from "../../components/Button/Button";
-import {Simulate} from "react-dom/test-utils";
+import {SidebarMenu} from "../../components/SidebarMenu/SidebarMenu";
+import {connectWallet} from "../../utils/connectWallet";
+import close from "../../assets/close2.svg";
 
 
 
 export const ConnectWallet: React.FC = () => {
-    const connectWallet = async () => {
-        try {
-            if (typeof window.ethereum === 'undefined') {
-                throw new Error('MetaMask not detected. Please install MetaMask.');
-            }
-            if (window.ethereum.selectedAddress) {
-                localStorage.setItem('wallet', window.ethereum.selectedAddress)
-            }
-            const account = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            console.log(account)
-        } catch (error) {
-            console.error('Error connecting wallet:', (error as Error).message);
-        }
-    };
 
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+    const [walletAddress, setWalletAddress] = useState<any>(localStorage.getItem('wallet'))
     const navigate = useNavigate();
-    const wallet = localStorage.getItem('wallet')
+
     useEffect(() => {
-        if (wallet) {
+        if (window.ethereum.isConnected()) {
+            setWalletAddress(localStorage.getItem('wallet'))
+        }
+        if (walletAddress) {
             navigate('/create-hero')
         }
-    }, [wallet]);
+    }, [walletAddress]);
+
+    const handleConnectWallet = async () => {
+        await connectWallet()
+        navigate('/create-hero')
+    }
 
     return (
         <Layout>
@@ -50,7 +49,7 @@ export const ConnectWallet: React.FC = () => {
                     <Button
                         value={'Connect Wallet'}
                         primary={true}
-                        onClick={connectWallet}
+                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                     />
                     <Button
                         value={'Quick Preview'}
@@ -59,6 +58,13 @@ export const ConnectWallet: React.FC = () => {
                     />
                 </div>
             </div>
+            <SidebarMenu isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(!isSidebarOpen)}>
+                <img src={close} alt="" onClick={() => setIsSidebarOpen(!isSidebarOpen)} className={'sidebar_close_button'}/>
+                <div className={'button_metamask'} onClick={handleConnectWallet}>
+                    <img src={metamask} alt="Metamask" className={'metamask_icon'}/>
+                    <p className={'button_metamask_title'}>MetaMask</p>
+                </div>
+            </SidebarMenu>
         </Layout>
     );
 };

@@ -1,13 +1,13 @@
-import React, {ChangeEvent, useState, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import {ethers, BrowserProvider, Contract, Wallet} from 'ethers'
 import Layout from "../../components/layout";
+import ContractABI from '../../contracts/HeroesCitadel.json'
 import balance from '../../assets/Balance.svg'
 import Avatar from '../../assets/Avatar.svg'
 import Lock from '../../assets/Lock.svg'
 import Hero from '../../assets/img/Hero.png'
 import ComingSoon from '../../assets/img/coming_soon.png'
 import {Button} from "../../components/Button/Button";
-import ContractABI from '../../contracts/HeroesCitadel.json'
 import {Box} from "../../components/Box/Box";
 import {BoxHeader} from "../../components/BoxHeader/BoxHeader";
 import {BoxSection} from "../../components/BoxSection/BoxSection";
@@ -18,6 +18,7 @@ import {BoxButtons} from "../../components/BoxButtons/BoxButtons";
 import {BoxText} from "../../components/BoxText/BoxText";
 import {BoxSteps} from "../../components/BoxSteps/BoxSteps";
 import {Modal} from "../../components/Modal/Modal";
+import {useNavigate} from "react-router-dom";
 
 export const CreateHero: React.FC = () => {
   const [characterName, setCharacterName] = useState('');
@@ -32,7 +33,7 @@ export const CreateHero: React.FC = () => {
   const [funds, setFunds] = useState('')
   const [contract, setContract] = useState<ethers.Contract | null>(null);
   const browserProvider = new BrowserProvider(window.ethereum);
-
+  const navigate = useNavigate();
   const handleAdjust = (valueType: string, action: string) => {
     if (valueType === 'attack' && action === 'increment' && attack < 5 && points > 0) {
       setPoints(points - 1)
@@ -50,6 +51,10 @@ export const CreateHero: React.FC = () => {
   };
 
   useEffect(() => {
+    console.log(window.ethereum.isConnected())
+    if (!localStorage.getItem('wallet')) {
+      navigate('connect-wallet')
+    }
     if (typeof window.ethereum !== 'undefined') {
       const heroesCitadelContract = new Contract(ContractABI.address, ContractABI.abi, browserProvider);
       setContract(heroesCitadelContract);
@@ -61,7 +66,7 @@ export const CreateHero: React.FC = () => {
         setWalletBalance(formattedBalance)
       });
     }
-  }, [sessionWallet]);
+  }, [sessionWallet, window.ethereum.isConnected()]);
 
   const createHero = async () => {
     setIsLoading(true)
@@ -69,7 +74,6 @@ export const CreateHero: React.FC = () => {
       console.error('Ethereum provider or contract not available.');
       return;
     }
-
     try {
       if (characterName.length < 5) {
         throw new Error('Name must be at least 5 characters');
@@ -79,11 +83,8 @@ export const CreateHero: React.FC = () => {
       const signer: Wallet = new Wallet(privateKey, browserProvider);
 
       const tx = await contract.createHero(characterName, signer.address, [attack], [health], {value: valueToRecharge});
-      console.log(tx)
       setIsLoading(true);
-
       await tx.wait();
-
     } catch (error) {
       console.error('Error creating hero:', (error as Error).message);
     } finally {
@@ -110,10 +111,6 @@ export const CreateHero: React.FC = () => {
     <img key={hero.id} src={hero.src} className={'box_hero'} alt=""></img>
   ))
 
-  const handleButtonClick = () => {
-
-  };
-
   return (
     <Layout>
       {step === 1 ?
@@ -128,6 +125,7 @@ export const CreateHero: React.FC = () => {
               value={characterName}
               handleChange={(e) => setCharacterName(e.target.value)}
               placeholder={'Enter Character Name'}
+
               isFull={true}/>
           </BoxSection>
           <BoxSection>

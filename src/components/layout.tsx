@@ -12,7 +12,6 @@ const Layout: React.FC<ILayout> = ({ children }) => {
                 <Header />
                 <main className={'main'}>{children}</main>
             </div>
-
         </div>
     );
 };
