@@ -90,8 +90,8 @@ export const Header: React.FC = () => {
               Connect Wallet
             </div>
           }
+          {sessionWallet ? <img src={avatar} alt="" className={'header_avatar'}/> : ''}
 
-          <img src={avatar} alt="" className={'header_avatar'}/>
         </div>
 
 
