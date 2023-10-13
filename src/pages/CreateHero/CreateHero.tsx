@@ -30,7 +30,7 @@ export const CreateHero: React.FC = () => {
   const [step, setStep] = useState<number>(1)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(false);
-  const [funds, setFunds] = useState('')
+  const [funds, setFunds] = useState('0.003')
   const [contract, setContract] = useState<ethers.Contract | null>(null);
   const browserProvider = new BrowserProvider(window.ethereum);
   const navigate = useNavigate();
@@ -78,7 +78,7 @@ export const CreateHero: React.FC = () => {
       if (characterName.length < 5) {
         throw new Error('Name must be at least 5 characters');
       }
-      const valueToRecharge: bigint = ethers.parseEther(funds);
+      const valueToRecharge: bigint = ethers.parseEther(funds.toString());
       const privateKey: string = Wallet.createRandom().privateKey;
       const signer: Wallet = new Wallet(privateKey, browserProvider);
 
