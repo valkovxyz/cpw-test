@@ -18,7 +18,8 @@ interface IBoxInput {
   setIncrement?: () => void;
   setDecrement?: () => void;
   inputType?: string,
-  isCrypto?: boolean
+  isCrypto?: boolean,
+  inputLength?: number
 }
 
 
@@ -37,7 +38,8 @@ export const BoxInput: React.FC<IBoxInput> = ({
                                                 addFunds,
                                                 setIncrement,
                                                 setDecrement,
-                                                inputType
+                                                inputType,
+                                                inputLength
                                               }) => {
   return (
     <label>
@@ -50,6 +52,7 @@ export const BoxInput: React.FC<IBoxInput> = ({
           : ''}
         <input
           type={inputType || 'text'}
+          minLength={inputLength}
           className={`box_input ${isFull ? 'full' : ''}`}
           value={value}
           onChange={handleChange}

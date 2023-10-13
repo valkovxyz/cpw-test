@@ -30,7 +30,7 @@ export const CreateHero: React.FC = () => {
   const [step, setStep] = useState<number>(1)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(false);
-  const [funds, setFunds] = useState('0.003')
+  const [funds, setFunds] = useState(0.003)
   const [contract, setContract] = useState<ethers.Contract | null>(null);
   const browserProvider = new BrowserProvider(window.ethereum);
   const navigate = useNavigate();
@@ -65,7 +65,7 @@ export const CreateHero: React.FC = () => {
         setWalletBalance(formattedBalance)
       });
     }
-  }, [sessionWallet, window.ethereum]);
+  }, [sessionWallet, window.ethereum, funds]);
 
   const createHero = async () => {
     setIsLoading(true)
@@ -83,7 +83,9 @@ export const CreateHero: React.FC = () => {
 
       const tx = await contract.createHero(characterName, signer.address, [attack], [health], {value: valueToRecharge});
       setIsLoading(true);
-      await tx.wait();
+      const receipt = await tx.wait();
+      const args = receipt.events[0].args;
+      console.log(args)
     } catch (error) {
       console.error('Error creating hero:', (error as Error).message);
     } finally {
@@ -123,8 +125,8 @@ export const CreateHero: React.FC = () => {
               title={'CharacterName'}
               value={characterName}
               handleChange={(e) => setCharacterName(e.target.value)}
+              inputLength={5}
               placeholder={'Enter Character Name'}
-
               isFull={true}/>
           </BoxSection>
           <BoxSection>
@@ -153,8 +155,9 @@ export const CreateHero: React.FC = () => {
           <BoxButtons>
             <Button
               value={'Next'}
-              primary={true}
-              onClick={() => setStep(2)}
+              primary={characterName.length >= 5}
+
+              onClick={() => setStep(characterName.length >= 5 ? 2 : 1)}
             />
           </BoxButtons>
         </Box>
@@ -193,7 +196,7 @@ export const CreateHero: React.FC = () => {
             <BoxInput
               title={'Add Funds'}
               value={funds}
-              handleChange={(e) => setFunds(e.target.value)}
+              handleChange={(e) => setFunds(Number(e.target.value))}
               placeholder={'0'}
               isButton={true}
               buttonText={'Add'}
