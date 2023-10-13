@@ -52,7 +52,7 @@ export const CreateHero: React.FC = () => {
 
   useEffect(() => {
     if (!localStorage.getItem('wallet')) {
-      navigate('connect-wallet')
+      navigate('/connect-wallet')
     }
     if (typeof window.ethereum !== 'undefined') {
       const heroesCitadelContract = new Contract(ContractABI.address, ContractABI.abi, browserProvider);
