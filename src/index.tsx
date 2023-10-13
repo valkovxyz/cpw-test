@@ -7,8 +7,13 @@ import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import {ConnectWallet} from "./pages/ConnectWallet/ConnectWallet";
 import {CreateHero} from "./pages/CreateHero/CreateHero";
+import App from "./App";
 
 const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <App />
+    },
     {
         path: "/connect-wallet",
         element: <ConnectWallet />

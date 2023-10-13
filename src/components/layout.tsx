@@ -1,10 +1,10 @@
 import React from 'react';
 import '../App.css';
-import {Header} from "./Header/header";
-interface MyTest {
+import {Header} from "./Header/Header";
+interface ILayout {
     children?: React.ReactNode
 }
-const Layout: React.FC<MyTest> = ({ children }) => {
+const Layout: React.FC<ILayout> = ({ children }) => {
     return (
         <div className={'layout'}>
             <span className={'triangle-topleft'} />

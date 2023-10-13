@@ -1,38 +1,36 @@
-import React, {useState} from "react";
+import React, {useEffect} from "react";
+import { useNavigate } from 'react-router-dom';
 import Layout from "../../components/layout";
 import connectImage from '../../assets/connect-image.png'
 import cyberpunksworld  from '../../assets/cyberpunksworld.svg';
 import {Button} from "../../components/Button/Button";
+import {Simulate} from "react-dom/test-utils";
 
 
 
 export const ConnectWallet: React.FC = () => {
-
-    const [isWalletConnected, setIsWalletConnected] = useState(false);
-
     const connectWallet = async () => {
         try {
             if (typeof window.ethereum === 'undefined') {
                 throw new Error('MetaMask not detected. Please install MetaMask.');
             }
-
             if (window.ethereum.selectedAddress) {
-                // MetaMask is connected, and you have access to the selected address
-                console.log('MetaMask is connected:', window.ethereum.selectedAddress);
+                localStorage.setItem('wallet', window.ethereum.selectedAddress)
             }
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            console.log(accounts)
-            if (accounts.length > 0) {
-                const userAddress = accounts[0];
-                setIsWalletConnected(true);
-                // Store userAddress or perform other actions
-            } else {
-                // Handle user denial
-            }
+            const account = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            console.log(account)
         } catch (error) {
             console.error('Error connecting wallet:', (error as Error).message);
         }
     };
+
+    const navigate = useNavigate();
+    const wallet = localStorage.getItem('wallet')
+    useEffect(() => {
+        if (wallet) {
+            navigate('/create-hero')
+        }
+    }, [wallet]);
 
     return (
         <Layout>

@@ -127,7 +127,7 @@ body {
     line-height: 10px;
 }
 
-.box_button_info {
+.modal_button {
     cursor: pointer;
     display: flex;
     width: 400px;
@@ -402,4 +402,79 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.modal {
+    position: absolute;
+    background-color: rgba(34, 44, 61, 0.5);
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    margin-top: -180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.description_modal {
+    margin: 20px;
+}
+
+.box_description > p {
+    margin: 0 20px 20px 20px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+}
+
+.box_copy_button {
+    position: absolute;
+    top: 24%;
+    right: 8%;
+    transform: translate(0, -50%);
+    cursor: pointer;
+}
+
+.header_wallet_dropdown {
+    display: flex;
+    height: 30px;
+    padding: 8px 16px;
+    align-items: center;
+    gap: 10px;
+    border-radius: 12px;
+    border: #222C3D;
+    background: #141B28;
+    color: #7EFADD;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.dropdown_open {
+    border-radius: 12px 12px 0 0;
+}
+
+.dropdown_icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.dropdown_menu {
+    position: absolute;
+    top: 113px;
+    right: 52px;
+    display: flex;
+    width: 193px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    border-radius: 0 0 12px 12px;
+    border: 1px solid #222C3D;
+    background: #141B28;
+    backdrop-filter: blur(5px);
+}
+
+.box_modal {
+    height: auto;
 }
