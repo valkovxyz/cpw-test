@@ -131,6 +131,7 @@ export const CreateHero: React.FC = () => {
           </BoxSection>
           <BoxSection>
             <p className={'box_text'}> Distribute {points} points across offered stats</p>
+
             <BoxInput
               title={'Attack'}
               value={attack}
@@ -157,7 +158,7 @@ export const CreateHero: React.FC = () => {
               value={'Next'}
               primary={characterName.length >= 5}
 
-              onClick={() => setStep(characterName.length >= 5 ? 2 : 1)}
+              onClick={() => setStep(characterName.length >= 5 ? step + 1 : step)}
             />
           </BoxButtons>
         </Box>
@@ -210,12 +211,12 @@ export const CreateHero: React.FC = () => {
             <Button
               value={'Back'}
               primary={false}
-              onClick={() => setStep(1)}
+              onClick={() => setStep(step - 1)}
             />
             <Button
               value={'Next'}
               primary={true}
-              onClick={() => setStep(3)}
+              onClick={() => setStep(step + 1)}
             />
           </BoxButtons>
         </Box>
@@ -253,7 +254,7 @@ export const CreateHero: React.FC = () => {
             <Button
               value={'Back'}
               primary={false}
-              onClick={() => setStep(2)}
+              onClick={() => setStep(step - 1)}
             />
             <Button
               value={'Create Hero'}

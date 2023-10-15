@@ -58,7 +58,7 @@ export const BoxInput: React.FC<IBoxInput> = ({
           onChange={handleChange}
           placeholder={placeholder}/>
         {isIncrement ?
-          <>
+          <div className={'box_input_buttons_container'}>
             <div className={'box_input_button'} onClick={setIncrement}>
               <img src={add} alt=""/>
             </div>
@@ -66,7 +66,7 @@ export const BoxInput: React.FC<IBoxInput> = ({
               <img src={minus} alt=""/>
             </div>
 
-          </>
+          </div>
           : ''}
         {isButton
           ?
