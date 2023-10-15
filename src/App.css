@@ -557,6 +557,12 @@ body {
     cursor: pointer;
 }
 
+.box_input_buttons_container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
 .header_avatar {
     height: 40px;
 }
