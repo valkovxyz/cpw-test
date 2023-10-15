@@ -561,3 +561,20 @@ body {
 .header_avatar {
     height: 40px;
 }
+
+@media (min-width: 250px) and (max-width: 650px) {
+    .header {
+        flex-direction: column;
+        justify-content: center;
+    }
+    .box {
+        width: 98%;
+    }
+    .header_wallet {
+        flex-direction: column;
+    }
+    .main {
+        margin-top: 10px;
+        height: auto;
+    }
+}

@@ -122,7 +122,7 @@ export const CreateHero: React.FC = () => {
           />
           <BoxSection>
             <BoxInput
-              title={'CharacterName'}
+              title={'Character Name'}
               value={characterName}
               handleChange={(e) => setCharacterName(e.target.value)}
               inputLength={5}
