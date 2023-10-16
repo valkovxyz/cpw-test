@@ -15,6 +15,6 @@ export const connectWallet: ConnectWalletFunction = async () => {
     const account = await window.ethereum.request({ method: 'eth_requestAccounts' });
     localStorage.setItem('wallet', account[0]);
   } catch (error) {
-    console.error('Error connecting wallet:', (error as Error).message);
+    alert((error as Error).message)
   }
 };

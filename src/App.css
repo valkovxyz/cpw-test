@@ -567,6 +567,78 @@ body {
     height: 40px;
 }
 
+.box_input_buttons input:focus {
+    border: 1px solid #7EFADD;
+}
+
+.notification {
+    position: fixed;
+    top: 16%;
+    right: 5%;
+    width: 158px;
+    height: 36px;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    transition: opacity 0.3s;
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    z-index: 1000;
+    border-radius: 5px;
+    background: #141B28;
+    backdrop-filter: blur(50px);
+}
+
+.notification_text {
+    text-align: right;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+}
+
+.line {
+    height: 3px;
+    width: 100%;
+    background-color: #7EFADD;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    animation: lineDisappear 5s linear;
+}
+
+@keyframes lineDisappear {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 0;
+    }
+}
+
+.visible {
+    opacity: 1;
+}
+
+.navigation {
+    position: absolute;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100vh;
+    gap: 10px;
+    width: 357px;
+    background: rgba(10, 3, 22);
+}
+
+.navigation_container {
+    margin: 32px;
+}
+
 @media (min-width: 250px) and (max-width: 650px) {
     .header {
         flex-direction: column;

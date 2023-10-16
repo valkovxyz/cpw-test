@@ -19,6 +19,7 @@ import {BoxText} from "../../components/BoxText/BoxText";
 import {BoxSteps} from "../../components/BoxSteps/BoxSteps";
 import {Modal} from "../../components/Modal/Modal";
 import {useNavigate} from "react-router-dom";
+import {Notification} from "../../components/Notification/Notification";
 
 export const CreateHero: React.FC = () => {
   const [characterName, setCharacterName] = useState('');
@@ -32,8 +33,21 @@ export const CreateHero: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [funds, setFunds] = useState(0.003)
   const [contract, setContract] = useState<ethers.Contract | null>(null);
+  const [notificationText, setNotificaitonText] = useState<string>('')
   const browserProvider = new BrowserProvider(window.ethereum);
+  const [isNavOpen, setIsNavOpen] = useState<boolean>(false)
+  const [showNotification, setShowNotification] = useState(false);
   const navigate = useNavigate();
+
+  const handleShowNotification = () => {
+    setShowNotification(true);
+
+    // Добавьте этот блок кода для сброса showNotification
+    setTimeout(() => {
+      setShowNotification(false);
+    }, 5500);
+  };
+
   const handleAdjust = (valueType: string, action: string) => {
     if (valueType === 'attack' && action === 'increment' && attack < 5 && points > 0) {
       setPoints(points - 1)
@@ -65,7 +79,7 @@ export const CreateHero: React.FC = () => {
         setWalletBalance(formattedBalance)
       });
     }
-  }, [sessionWallet, window.ethereum, funds]);
+  }, [sessionWallet, funds]);
 
   const createHero = async () => {
     setIsLoading(true)
@@ -90,6 +104,17 @@ export const CreateHero: React.FC = () => {
       console.error('Error creating hero:', (error as Error).message);
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  const nextStep = () => {
+
+    if (characterName.length < 5 ) {
+      setNotificaitonText('Name must be at least 5 characters')
+      handleShowNotification()
+      console.log(showNotification)
+    } else {
+      setStep(step +1)
     }
   }
 
@@ -135,6 +160,8 @@ export const CreateHero: React.FC = () => {
             <BoxInput
               title={'Attack'}
               value={attack}
+              inputType={'number'}
+              isDisabled={true}
               handleChange={(e) => setAttack(Number(e.target.value))}
               placeholder={'0'}
               isIncrement={true}
@@ -143,8 +170,9 @@ export const CreateHero: React.FC = () => {
             />
             <BoxInput
               title={'Health'}
-              inputType={"number"}
               value={health}
+              inputType={'number'}
+              isDisabled={true}
               handleChange={(e) => setHealth(Number(e.target.value))}
               placeholder={'0'}
               isIncrement={true}
@@ -158,7 +186,7 @@ export const CreateHero: React.FC = () => {
               value={'Next'}
               primary={characterName.length >= 5}
 
-              onClick={() => setStep(characterName.length >= 5 ? step + 1 : step)}
+              onClick={() => nextStep()}
             />
           </BoxButtons>
         </Box>
@@ -311,6 +339,9 @@ export const CreateHero: React.FC = () => {
           </>
           : ''}
       </Modal>
+      {showNotification ?
+        <Notification
+          text={notificationText}/> : ''}
     </Layout>
   );
 };

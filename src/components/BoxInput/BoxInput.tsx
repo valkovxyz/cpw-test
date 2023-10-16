@@ -19,10 +19,9 @@ interface IBoxInput {
   setDecrement?: () => void;
   inputType?: string,
   isCrypto?: boolean,
+  isDisabled?: boolean,
   inputLength?: number
 }
-
-
 
 
 export const BoxInput: React.FC<IBoxInput> = ({
@@ -39,6 +38,7 @@ export const BoxInput: React.FC<IBoxInput> = ({
                                                 setIncrement,
                                                 setDecrement,
                                                 inputType,
+                                                isDisabled = false,
                                                 inputLength
                                               }) => {
   return (
@@ -47,10 +47,11 @@ export const BoxInput: React.FC<IBoxInput> = ({
       <div className={'box_input_buttons'}>
         {isCrypto ?
           <CopyToClipboard text={`${value}`}>
-          <img src={copy} alt="Copy" className={'box_copy_button'} />
+            <img src={copy} alt="Copy" className={'box_copy_button'}/>
           </CopyToClipboard>
           : ''}
         <input
+          disabled={isDisabled}
           type={inputType || 'text'}
           minLength={inputLength}
           className={`box_input ${isFull ? 'full' : ''}`}
