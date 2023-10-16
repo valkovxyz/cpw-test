@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from 'react-redux';
 import '../../App.css';
 import logo from '../../assets/img/logo.png';
 import menu from '../../assets/img/menu.png';
@@ -18,24 +19,30 @@ import {DropdownItem} from "../DropdownItem/DropdownItem";
 import {connectWallet} from "../../utils/connectWallet";
 import {SidebarMenu} from "../SidebarMenu/SidebarMenu";
 import metamask from "../../assets/metamask.svg";
+import {setNavOpen, setSideBarOpen} from "../../store/navigationSlice";
+import {RootState} from "../../store/store";
 
 
 export const Header: React.FC = () => {
   const [sessionWallet, setSessionSessionWallet] = useState<string>('')
   const [truncatedWallet, setTruncatedWallet] = useState<string>('')
   const [isOpen, setIsOpen] = useState(false)
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-  const navigate = useNavigate()
+  const isNavOpen = useSelector((state: RootState) => state.navigation.isNavOpen);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleToggleNav = () => {
+    dispatch(setNavOpen(!isNavOpen));
+  };
+
+  const handleToggleSideBar = () => {
+    dispatch(setSideBarOpen(true));
+  };
   const truncateString = () => {
     if (sessionWallet) {
       const value: string = `${sessionWallet.substring(0, 5)}....${sessionWallet.substring(sessionWallet.length - 4)}`;
       setTruncatedWallet(value)
     }
-  }
-
-  const handleConnectWallet = async () => {
-    await connectWallet()
-    navigate('/create-hero')
   }
 
   useEffect(() => {
@@ -49,7 +56,7 @@ export const Header: React.FC = () => {
     <>
       <header className={'header'}>
         <div className={'header_title'}>
-          <img src={menu} alt='menu'/>
+          <img src={menu} alt='menu' onClick={() => handleToggleNav()} className={'sidebar_close_button'}/>
           <img src={logo} alt='logo'/>
         </div>
         <div className={'header_wallet'}>
@@ -86,7 +93,7 @@ export const Header: React.FC = () => {
             </div>
 
             :
-            <div className={'header_wallet_connect'} onClick={() => setIsSidebarOpen(!isOpen)}>
+            <div className={'header_wallet_connect'} onClick={() => handleToggleSideBar()}>
               Connect Wallet
             </div>
           }
@@ -96,13 +103,6 @@ export const Header: React.FC = () => {
 
 
       </header>
-      <SidebarMenu isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(!isSidebarOpen)}>
-        <img src={close} alt="" onClick={() => setIsSidebarOpen(!isSidebarOpen)} className={'sidebar_close_button'}/>
-        <div className={'button_metamask'} onClick={handleConnectWallet}>
-          <img src={metamask} alt="Metamask" className={'metamask_icon'}/>
-          <p className={'button_metamask_title'}>MetaMask</p>
-        </div>
-      </SidebarMenu>
     </>
   )
 }
