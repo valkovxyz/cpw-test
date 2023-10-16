@@ -1,28 +1,52 @@
-import React, { createContext, useContext, useState } from 'react';
-import '../App.css';
+import React from 'react';
+import {useNavigate} from "react-router-dom";
+import {useSelector, useDispatch} from "react-redux";
 import {Header} from "./Header/Header";
 import {Navigation} from "./Navigation/Navigation";
+import {RootState} from "../store/store";
+import '../App.css';
+import {SidebarMenu} from "./SidebarMenu/SidebarMenu";
+import {connectWallet} from "../utils/connectWallet";
+import { setNavOpen, setSideBarOpen } from '../store/navigationSlice';
+
 interface ILayout {
-    children?: React.ReactNode
-    isNavOpen?: boolean
+  children?: React.ReactNode
 }
 
+const Layout: React.FC<ILayout> = ({children}) => {
+  const navigate = useNavigate()
+  const handleConnectWallet = async () => {
+    await connectWallet()
+    navigate('/create-hero')
+  }
 
-const NavigationContext: React.Context<boolean> = createContext(false)
-const Layout: React.FC<ILayout> = ({ children, isNavOpen = false }) => {
-    return (
-      <NavigationContext.Provider value={isNavOpen} >
-        <div className={'layout'}>
-            <span className={'triangle-topleft'} />
-            <div className={'container'}>
-                <Header />
-                <main className={'main'}>{children}</main>
-            </div>
-          {isNavOpen && <Navigation />}
-        </div>
-      </NavigationContext.Provider>
+  const isNavOpen = useSelector((state: RootState) => state.navigation.isNavOpen);
+  const isSideBarOpen = useSelector((state: RootState) => state.navigation.isSideBarOpen);
+  const dispatch = useDispatch();
 
-    );
+  const handleToggleNav = () => {
+    dispatch(setNavOpen(!isNavOpen));
+  };
+
+  const handleToggleSideBar = () => {
+    dispatch(setSideBarOpen(!isSideBarOpen));
+  };
+
+  return (
+    <div className={'layout'}>
+      <span className={'triangle-topleft'}/>
+      <div className={'container'}>
+        <Header/>
+        <main className={'main'}>{children}</main>
+      </div>
+      {isNavOpen && <Navigation handleClose={() => handleToggleNav()}/>}
+      {isSideBarOpen
+        && <SidebarMenu
+              connectWallet={() => handleConnectWallet()}
+              handleClose={() => {handleToggleSideBar()}}
+          />}
+    </div>
+  );
 };
 export default Layout;
 

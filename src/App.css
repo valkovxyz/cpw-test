@@ -639,6 +639,42 @@ body {
     margin: 32px;
 }
 
+.navigation_section {
+    margin-top: 20px;
+}
+
+.navigation_section_item {
+    display: flex;
+    align-items: center;
+    gap: 0 10px;
+    height: 46px;
+}
+
+.navigation_section_item_img {
+    width: 24px;
+    height: 24px;
+}
+
+.navigation_header {
+    width: 100%;
+    text-align: right;
+}
+
+.navigation_header_close {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+}
+
+.navigation_section_item_text {
+    font-family: Orbitron;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 32px; /* 133.333% */
+    color: #FFF;
+}
+
 @media (min-width: 250px) and (max-width: 650px) {
     .header {
         flex-direction: column;

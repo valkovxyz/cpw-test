@@ -8,6 +8,9 @@ import {Button} from "../../components/Button/Button";
 import {SidebarMenu} from "../../components/SidebarMenu/SidebarMenu";
 import {connectWallet} from "../../utils/connectWallet";
 import close from "../../assets/close2.svg";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../store/store";
+import {setSideBarOpen} from "../../store/navigationSlice";
 
 
 
@@ -16,6 +19,11 @@ export const ConnectWallet: React.FC = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const [walletAddress, setWalletAddress] = useState<any>(localStorage.getItem('wallet'))
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const handleToggleSideBar = () => {
+        dispatch(setSideBarOpen(true));
+    };
 
     useEffect(() => {
         if (window.ethereum) {
@@ -25,11 +33,6 @@ export const ConnectWallet: React.FC = () => {
             navigate('/create-hero')
         }
     }, [walletAddress]);
-
-    const handleConnectWallet = async () => {
-        await connectWallet()
-        navigate('/create-hero')
-    }
 
     return (
         <Layout>
@@ -49,7 +52,7 @@ export const ConnectWallet: React.FC = () => {
                     <Button
                         value={'Connect Wallet'}
                         primary={true}
-                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                        onClick={() => handleToggleSideBar()}
                     />
                     <Button
                         value={'Quick Preview'}
@@ -58,13 +61,6 @@ export const ConnectWallet: React.FC = () => {
                     />
                 </div>
             </div>
-            <SidebarMenu isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(!isSidebarOpen)}>
-                <img src={close} alt="" onClick={() => setIsSidebarOpen(!isSidebarOpen)} className={'sidebar_close_button'}/>
-                <div className={'button_metamask'} onClick={handleConnectWallet}>
-                    <img src={metamask} alt="Metamask" className={'metamask_icon'}/>
-                    <p className={'button_metamask_title'}>MetaMask</p>
-                </div>
-            </SidebarMenu>
         </Layout>
     );
 };
