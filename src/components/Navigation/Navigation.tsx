@@ -10,12 +10,14 @@ import nftSale from '../../assets/token.svg'
 import close from '../../assets/close.svg'
 
 interface INavigation {
-  handleClose?: () => void
+  handleClose?: () => void,
+  isActive?: boolean
 }
-export const Navigation : React.FC<INavigation> = ({handleClose}) => {
+
+export const Navigation : React.FC<INavigation> = ({handleClose, isActive}) => {
   return (
-    <div className={'navigation'}>
-      <div className={'navigation_container'}>
+    <div className={`navigation${isActive ? ' isopen' : ''}`}>
+      <div className={`navigation_container`}>
       <div className={'navigation_header'}>
         <img src={close} alt="" className={'navigation_header_close'} onClick={handleClose} />
       </div>

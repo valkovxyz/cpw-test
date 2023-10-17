@@ -11,7 +11,6 @@ export const connectWallet: ConnectWalletFunction = async () => {
     } else {
       localStorage.removeItem('wallet')
     }
-
     const account = await window.ethereum.request({ method: 'eth_requestAccounts' });
     localStorage.setItem('wallet', account[0]);
   } catch (error) {

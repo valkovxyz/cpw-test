@@ -3,20 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import Layout from "../../components/layout";
 import connectImage from '../../assets/connect-image.png'
 import cyberpunksworld  from '../../assets/cyberpunksworld.svg';
-import metamask from '../../assets/metamask.svg'
 import {Button} from "../../components/Button/Button";
-import {SidebarMenu} from "../../components/SidebarMenu/SidebarMenu";
-import {connectWallet} from "../../utils/connectWallet";
-import close from "../../assets/close2.svg";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../store/store";
+import {useDispatch} from "react-redux";
 import {setSideBarOpen} from "../../store/navigationSlice";
 
 
 
 export const ConnectWallet: React.FC = () => {
-
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const [walletAddress, setWalletAddress] = useState<any>(localStorage.getItem('wallet'))
     const navigate = useNavigate();
     const dispatch = useDispatch();

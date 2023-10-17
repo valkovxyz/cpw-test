@@ -35,14 +35,12 @@ export const CreateHero: React.FC = () => {
   const [contract, setContract] = useState<ethers.Contract | null>(null);
   const [notificationText, setNotificaitonText] = useState<string>('')
   const browserProvider = new BrowserProvider(window.ethereum);
-  const [isNavOpen, setIsNavOpen] = useState<boolean>(false)
-  const [showNotification, setShowNotification] = useState(false);
+  const [showNotification, setShowNotification] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleShowNotification = () => {
     setShowNotification(true);
 
-    // Добавьте этот блок кода для сброса showNotification
     setTimeout(() => {
       setShowNotification(false);
     }, 5500);
@@ -108,13 +106,20 @@ export const CreateHero: React.FC = () => {
   }
 
   const nextStep = () => {
-
-    if (characterName.length < 5 ) {
-      setNotificaitonText('Name must be at least 5 characters')
-      handleShowNotification()
-      console.log(showNotification)
-    } else {
-      setStep(step +1)
+    if (step === 1) {
+      if (characterName.length < 5) {
+        setNotificaitonText('Name must be at least 5 characters')
+        handleShowNotification()
+      } else {
+        setStep(step + 1)
+      }
+    } else if (step === 2) {
+      if (funds < 0.003) {
+        setNotificaitonText('The minimal required ETH is 0.003')
+        handleShowNotification()
+      } else {
+        setStep(step + 1)
+      }
     }
   }
 
@@ -185,7 +190,6 @@ export const CreateHero: React.FC = () => {
             <Button
               value={'Next'}
               primary={characterName.length >= 5}
-
               onClick={() => nextStep()}
             />
           </BoxButtons>
@@ -339,9 +343,8 @@ export const CreateHero: React.FC = () => {
           </>
           : ''}
       </Modal>
-      {showNotification ?
-        <Notification
-          text={notificationText}/> : ''}
+      {showNotification ? <Notification text={notificationText} /> : ''}
+
     </Layout>
   );
 };

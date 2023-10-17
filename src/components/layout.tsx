@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
 import {Header} from "./Header/Header";
@@ -14,10 +14,12 @@ interface ILayout {
 }
 
 const Layout: React.FC<ILayout> = ({children}) => {
+
   const navigate = useNavigate()
   const handleConnectWallet = async () => {
     await connectWallet()
     navigate('/create-hero')
+    dispatch(setSideBarOpen(!isSideBarOpen));
   }
 
   const isNavOpen = useSelector((state: RootState) => state.navigation.isNavOpen);
@@ -27,7 +29,6 @@ const Layout: React.FC<ILayout> = ({children}) => {
   const handleToggleNav = () => {
     dispatch(setNavOpen(!isNavOpen));
   };
-
   const handleToggleSideBar = () => {
     dispatch(setSideBarOpen(!isSideBarOpen));
   };
@@ -39,12 +40,12 @@ const Layout: React.FC<ILayout> = ({children}) => {
         <Header/>
         <main className={'main'}>{children}</main>
       </div>
-      {isNavOpen && <Navigation handleClose={() => handleToggleNav()}/>}
-      {isSideBarOpen
-        && <SidebarMenu
+      <Navigation isActive={isNavOpen} handleClose={() => handleToggleNav()}/>
+      <SidebarMenu
+              isOpen={isSideBarOpen}
               connectWallet={() => handleConnectWallet()}
               handleClose={() => {handleToggleSideBar()}}
-          />}
+          />
     </div>
   );
 };
