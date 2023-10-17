@@ -22,14 +22,16 @@ import metamask from "../../assets/metamask.svg";
 import {setNavOpen, setSideBarOpen} from "../../store/navigationSlice";
 import {RootState} from "../../store/store";
 
+interface IHeader {
+}
 
-export const Header: React.FC = () => {
+export const Header: React.FC<IHeader> = () => {
   const [sessionWallet, setSessionSessionWallet] = useState<string>('')
   const [truncatedWallet, setTruncatedWallet] = useState<string>('')
   const [isOpen, setIsOpen] = useState(false)
-  const isNavOpen = useSelector((state: RootState) => state.navigation.isNavOpen);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const isNavOpen = useSelector((state: RootState) => state.navigation.isNavOpen);
 
   const handleToggleNav = () => {
     dispatch(setNavOpen(!isNavOpen));
@@ -56,7 +58,7 @@ export const Header: React.FC = () => {
     <>
       <header className={'header'}>
         <div className={'header_title'}>
-          <img src={menu} alt='menu' onClick={() => handleToggleNav()} className={'sidebar_close_button'}/>
+          <img src={menu} alt='menu' onClick={() => handleToggleNav()} className={'menu'}/>
           <img src={logo} alt='logo'/>
         </div>
         <div className={'header_wallet'}>

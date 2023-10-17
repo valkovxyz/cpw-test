@@ -9,7 +9,7 @@ export const Modal: React.FC<IModal> = ({children, isOpen, handleClose}) => {
   return (
     <>
     {isOpen ?
-        <div className={'modal'} hidden={isOpen} onClick={handleClose} >
+        <div className={`modal ${isOpen ? 'active' : ''}`} onClick={handleClose} >
         <Box isModal={isOpen}>
           {children}
         </Box>

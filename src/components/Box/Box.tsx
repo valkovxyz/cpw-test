@@ -1,4 +1,4 @@
-import React, {ReactPortal} from "react";
+import React from "react";
 interface IBox {
     children?: React.ReactNode,
     isWallet?: boolean,

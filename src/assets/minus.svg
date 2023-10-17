@@ -1,5 +1,16 @@
-<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="add" opacity="0.7">
-<path id="Vector" d="M18.6666 10H1.33325" stroke="#7EFADD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g opacity="0.7" filter="url(#filter0_b_1804_772)">
+<circle cx="22" cy="22" r="21.5" stroke="#7EFADD"/>
 </g>
+<g opacity="0.7">
+<path d="M30.6668 22H13.3335" stroke="#7EFADD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<filter id="filter0_b_1804_772" x="-100" y="-100" width="244" height="244" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feGaussianBlur in="BackgroundImageFix" stdDeviation="50"/>
+<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_1804_772"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_1804_772" result="shape"/>
+</filter>
+</defs>
 </svg>
