@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {ethers, BrowserProvider, Contract, Wallet} from 'ethers'
+import {ethers, providers, Contract, Wallet, BigNumber} from 'ethers'
 import Layout from "../../components/layout";
 import ContractABI from '../../contracts/HeroesCitadel.json'
 import balance from '../../assets/Balance.svg'
@@ -32,11 +32,29 @@ export const CreateHero: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(false);
   const [funds, setFunds] = useState(0.003)
-  const [contract, setContract] = useState<ethers.Contract | null>(null);
   const [notificationText, setNotificaitonText] = useState<string>('')
-  const browserProvider = new BrowserProvider(window.ethereum);
+  //const browserProvider = new BrowserProvider(window.ethereum);
+  const [heroClass, setHeroClass] = useState<number>(0)
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const navigate = useNavigate();
+
+  const testAbi = [
+    "function createHero(string calldata _name, address _sessionWallet, HeroClass _heroClass, StatsKey[] calldata _keys, uint16[] calldata _values) external payable"
+]
+
+  enum StatsKey {
+    NotConfigured,
+    Attack, // 1
+    Health  // 2
+  }
+
+  enum HeroClass {
+    NOT_CONFIGURED,
+    INFILTRATOR,
+    AGENT_X,
+    TECHNOMANCER,
+    NETRUNNER
+  }
 
   const handleShowNotification = () => {
     setShowNotification(true);
@@ -66,13 +84,9 @@ export const CreateHero: React.FC = () => {
     if (!localStorage.getItem('wallet')) {
       navigate('/connect-wallet')
     }
-    if (typeof window.ethereum !== 'undefined') {
-      const heroesCitadelContract = new Contract(ContractABI.address, ContractABI.abi, browserProvider);
-      setContract(heroesCitadelContract);
-    }
     if (sessionWallet) {
-      browserProvider.getBalance(sessionWallet).then((balance) => {
-        const balanceInEth = ethers.formatEther(balance);
+      ethers.getDefaultProvider().getBalance(sessionWallet).then((balance) => {
+        const balanceInEth = ethers.utils.formatEther(balance);
         const formattedBalance = parseFloat(balanceInEth).toFixed(3);
         setWalletBalance(formattedBalance)
       });
@@ -80,30 +94,35 @@ export const CreateHero: React.FC = () => {
   }, [sessionWallet, funds]);
 
   const createHero = async () => {
-    setIsLoading(true)
-    if (!contract || !browserProvider) {
-      console.error('Ethereum provider or contract not available.');
+    setIsLoading(true);
+    if (!ethers.getDefaultProvider()) {
+      console.error('Ethereum provider not available.');
       return;
     }
     try {
-      if (characterName.length < 5) {
-        throw new Error('Name must be at least 5 characters');
-      }
-      const valueToRecharge: bigint = ethers.parseEther(funds.toString());
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
       const privateKey: string = Wallet.createRandom().privateKey;
-      const signer: Wallet = new Wallet(privateKey, browserProvider);
-
-      const tx = await contract.createHero(characterName, signer.address, [attack], [health], {value: valueToRecharge});
+      const signer: Wallet = new Wallet(privateKey, provider);
+      const valueToRecharge: BigNumber = ethers.utils.parseEther(funds.toString());
+      const heroesCitadelContract = new Contract(ContractABI.address, ContractABI.abi, ethers.getDefaultProvider());
+      console.log(ethers.getDefaultProvider().getCode(sessionWallet))
+      const testheroes = await heroesCitadelContract.getHeroes(sessionWallet);
+      console.log(testheroes)
+      console.log(heroesCitadelContract)
+      const tx = await heroesCitadelContract.createHero(characterName, signer, heroClass, [attack], [health], { value: valueToRecharge });
+      console.log(tx)
       setIsLoading(true);
       const receipt = await tx.wait();
+      console.log(receipt);
       const args = receipt.events[0].args;
-      console.log(args)
+
+      console.log(args);
     } catch (error) {
       console.error('Error creating hero:', (error as Error).message);
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   const nextStep = () => {
     if (step === 1) {
@@ -123,24 +142,27 @@ export const CreateHero: React.FC = () => {
     }
   }
 
+
   const heroes = [
-    {id: 0, src: Avatar},
-    {id: 1, src: Avatar},
-    {id: 2, src: Avatar},
-    {id: 3, src: Avatar},
-    {id: 4, src: Lock},
-    {id: 5, src: Lock},
-    {id: 6, src: Lock},
-    {id: 7, src: Lock},
-    {id: 8, src: Lock},
-    {id: 9, src: Lock},
-    {id: 10, src: Lock},
-    {id: 11, src: Lock},
-  ]
+    { id: 0, src: Avatar, heroClass: HeroClass.INFILTRATOR },
+    { id: 1, src: Avatar, heroClass: HeroClass.AGENT_X },
+    { id: 2, src: Avatar, heroClass: HeroClass.TECHNOMANCER },
+    { id: 3, src: Avatar, heroClass: HeroClass.NETRUNNER },
+    { id: 4, src: Lock },
+    { id: 5, src: Lock },
+    { id: 6, src: Lock },
+    { id: 7, src: Lock },
+    { id: 8, src: Lock },
+    { id: 9, src: Lock },
+    { id: 10, src: Lock },
+    { id: 11, src: Lock },
+  ];
 
   const HeroList: any = () => heroes.map((hero) => (
-    <img key={hero.id} src={hero.src} className={'box_hero'} alt=""></img>
+    <img key={hero.id} src={hero.src} className={'box_hero'} alt="" onClick={() => setHeroClass(hero.heroClass || 0)}></img>
   ))
+
+
 
   return (
     <Layout>
