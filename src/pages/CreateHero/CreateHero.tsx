@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {ethers, Contract, Wallet, BigNumber} from 'ethers'
+import {ethers, providers, Contract, Wallet, BigNumber} from 'ethers'
 import Layout from "../../components/layout";
 import ContractABI from '../../contracts/HeroesCitadel.json'
 import balance from '../../assets/Balance.svg'
@@ -100,15 +100,16 @@ export const CreateHero: React.FC = () => {
       return;
     }
     try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
       const privateKey: string = Wallet.createRandom().privateKey;
-      const signer: Wallet = new Wallet(privateKey, ethers.getDefaultProvider());
+      const signer: Wallet = new Wallet(privateKey, provider);
       const valueToRecharge: BigNumber = ethers.utils.parseEther(funds.toString());
       const heroesCitadelContract = new Contract(ContractABI.address, ContractABI.abi, ethers.getDefaultProvider());
       console.log(ethers.getDefaultProvider().getCode(sessionWallet))
       const testheroes = await heroesCitadelContract.getHeroes(sessionWallet);
       console.log(testheroes)
       console.log(heroesCitadelContract)
-      const tx = await heroesCitadelContract.createHero(characterName, signer, 'AGENT_X', [1], [2], { value: valueToRecharge });
+      const tx = await heroesCitadelContract.createHero(characterName, signer, heroClass, [attack], [health], { value: valueToRecharge });
       console.log(tx)
       setIsLoading(true);
       const receipt = await tx.wait();
