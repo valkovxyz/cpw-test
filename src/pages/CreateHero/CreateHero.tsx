@@ -104,11 +104,11 @@ export const CreateHero: React.FC = () => {
       const signer: Wallet = new Wallet(privateKey, ethers.getDefaultProvider());
       const valueToRecharge: BigNumber = ethers.utils.parseEther(funds.toString());
       const heroesCitadelContract = new Contract(ContractABI.address, ContractABI.abi, ethers.getDefaultProvider());
-
+      console.log(ethers.getDefaultProvider().getCode(sessionWallet))
       const testheroes = await heroesCitadelContract.getHeroes(sessionWallet);
       console.log(testheroes)
       console.log(heroesCitadelContract)
-      const tx = await heroesCitadelContract.createHero(characterName, signer, heroClass, [attack], [health], { value: valueToRecharge });
+      const tx = await heroesCitadelContract.createHero(characterName, signer, 'AGENT_X', [1], [2], { value: valueToRecharge });
       console.log(tx)
       setIsLoading(true);
       const receipt = await tx.wait();
