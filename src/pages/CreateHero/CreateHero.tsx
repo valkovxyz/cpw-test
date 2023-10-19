@@ -98,7 +98,6 @@ export const CreateHero: React.FC = () => {
       return;
     }
     try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
       const accounts = await provider.listAccounts();
       const signer = provider.getSigner(accounts[0]);
       const valueToRecharge: BigNumber = ethers.utils.parseEther(funds.toString());
