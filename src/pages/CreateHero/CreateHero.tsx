@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {ethers, providers, Contract, Wallet, BigNumber} from 'ethers'
+import {ethers, Contract, BigNumber} from 'ethers'
 import Layout from "../../components/layout";
 import ContractABI from '../../contracts/HeroesCitadel.json'
 import balance from '../../assets/Balance.svg'
@@ -7,6 +7,7 @@ import Avatar from '../../assets/Avatar.svg'
 import Lock from '../../assets/Lock.svg'
 import Hero from '../../assets/img/Hero.png'
 import ComingSoon from '../../assets/img/coming_soon.png'
+import equip from '../../assets/equip.svg'
 import {Button} from "../../components/Button/Button";
 import {Box} from "../../components/Box/Box";
 import {BoxHeader} from "../../components/BoxHeader/BoxHeader";
@@ -31,16 +32,12 @@ export const CreateHero: React.FC = () => {
   const [step, setStep] = useState<number>(1)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(false);
-  const [funds, setFunds] = useState(0.003)
+  const [funds, setFunds] = useState<number | string>(0)
   const [notificationText, setNotificaitonText] = useState<string>('')
-  //const browserProvider = new BrowserProvider(window.ethereum);
   const [heroClass, setHeroClass] = useState<number>(0)
   const [showNotification, setShowNotification] = useState<boolean>(false);
+  const [heroId, setHeroId] = useState<number>(0)
   const navigate = useNavigate();
-
-  const testAbi = [
-    "function createHero(string calldata _name, address _sessionWallet, HeroClass _heroClass, StatsKey[] calldata _keys, uint16[] calldata _values) external payable"
-]
 
   enum StatsKey {
     NotConfigured,
@@ -63,7 +60,6 @@ export const CreateHero: React.FC = () => {
       setShowNotification(false);
     }, 5500);
   };
-
   const handleAdjust = (valueType: string, action: string) => {
     if (valueType === 'attack' && action === 'increment' && attack < 5 && points > 0) {
       setPoints(points - 1)
@@ -84,42 +80,34 @@ export const CreateHero: React.FC = () => {
     if (!localStorage.getItem('wallet')) {
       navigate('/connect-wallet')
     }
-    if (sessionWallet) {
-      ethers.getDefaultProvider().getBalance(sessionWallet).then((balance) => {
+    if (sessionWallet && localStorage.getItem('wallet')) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum)
+      provider.getBalance(sessionWallet).then((balance) => {
         const balanceInEth = ethers.utils.formatEther(balance);
-        const formattedBalance = parseFloat(balanceInEth).toFixed(3);
+        const formattedBalance = parseFloat(balanceInEth).toFixed(4);
         setWalletBalance(formattedBalance)
       });
     }
   }, [sessionWallet, funds]);
 
   const createHero = async () => {
-    setIsLoading(true);
-    if (!ethers.getDefaultProvider()) {
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    const accounts = await provider.listAccounts();
+    const signer = provider.getSigner(accounts[0]);
+    const valueToRecharge: BigNumber = ethers.utils.parseEther(funds.toString());
+    if (!provider) {
       console.error('Ethereum provider not available.');
       return;
     }
     try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      const privateKey: string = Wallet.createRandom().privateKey;
-      const signer: Wallet = new Wallet(privateKey, provider);
-      const valueToRecharge: BigNumber = ethers.utils.parseEther(funds.toString());
-      const heroesCitadelContract = new Contract(ContractABI.address, ContractABI.abi, ethers.getDefaultProvider());
-      console.log(ethers.getDefaultProvider().getCode(sessionWallet))
-      const testheroes = await heroesCitadelContract.getHeroes(sessionWallet);
-      console.log(testheroes)
-      console.log(heroesCitadelContract)
-      const tx = await heroesCitadelContract.createHero(characterName, signer, heroClass, [attack], [health], { value: valueToRecharge });
-      console.log(tx)
       setIsLoading(true);
-      const receipt = await tx.wait();
-      console.log(receipt);
-      const args = receipt.events[0].args;
-
-      console.log(args);
+      const heroesCitadelContract = new Contract(ContractABI.address, ContractABI.abi, signer);
+      const tx = await heroesCitadelContract.createHero(characterName, signer._address, heroClass, [attack], [health], { value: valueToRecharge, gasLimit: 150000 });
+      await tx.wait();
+      setIsLoading(false);
+      navigate('/battle-station')
     } catch (error) {
       console.error('Error creating hero:', (error as Error).message);
-    } finally {
       setIsLoading(false);
     }
   };
@@ -159,8 +147,20 @@ export const CreateHero: React.FC = () => {
   ];
 
   const HeroList: any = () => heroes.map((hero) => (
-    <img key={hero.id} src={hero.src} className={'box_hero'} alt="" onClick={() => setHeroClass(hero.heroClass || 0)}></img>
+    <div className={'box_hero_container'}>
+    <img key={hero.id} src={hero.src} className={'box_hero'} alt="" onClick={() => setHeroClass(hero.heroClass || heroClass)}>
+
+    </img>
+      {hero.id === heroClass - 1 ?  <div className={'box_hero_equip'}><img src={equip} alt="Equip"/></div>  : ''}
+    </div>
   ))
+
+  const handleValidateNumber = (inputValue: string) => {
+
+    if (/^[0-9]*\.?[0-9]*$/.test(inputValue)) {
+      setFunds(inputValue);
+    }
+  };
 
 
 
@@ -250,8 +250,9 @@ export const CreateHero: React.FC = () => {
             </BoxDescription>
             <BoxInput
               title={'Add Funds'}
-              value={funds}
-              handleChange={(e) => setFunds(Number(e.target.value))}
+              value={funds.toString()}
+              inputType={'text'}
+              handleChange={(e) => handleValidateNumber(e.target.value)}
               placeholder={'0'}
               isButton={true}
               buttonText={'Add'}
@@ -270,7 +271,7 @@ export const CreateHero: React.FC = () => {
             <Button
               value={'Next'}
               primary={true}
-              onClick={() => setStep(step + 1)}
+              onClick={() => nextStep()}
             />
           </BoxButtons>
         </Box>
@@ -311,6 +312,7 @@ export const CreateHero: React.FC = () => {
               onClick={() => setStep(step - 1)}
             />
             <Button
+              isLoading={isLoading}
               value={'Create Hero'}
               primary={true}
               onClick={createHero}

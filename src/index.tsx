@@ -10,6 +10,7 @@ import {CreateHero} from "./pages/CreateHero/CreateHero";
 import App from "./App";
 import {Provider} from "react-redux";
 import store from "./store/store";
+import {BattleStation} from "./pages/BattleStation/BattleStation";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: "/create-hero",
     element: <CreateHero/>
+  },
+  {
+    path: "/battle-station",
+    element: <BattleStation/>
   }
 ]);
 
