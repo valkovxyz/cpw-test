@@ -18,7 +18,9 @@ const Layout: React.FC<ILayout> = ({children}) => {
   const navigate = useNavigate()
   const handleConnectWallet = async () => {
     await connectWallet()
+    if (localStorage.getItem('wallet')) {
     navigate('/create-hero')
+    }
     dispatch(setSideBarOpen(!isSideBarOpen));
   }
 
