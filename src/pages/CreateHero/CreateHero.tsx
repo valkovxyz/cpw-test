@@ -32,7 +32,7 @@ export const CreateHero: React.FC = () => {
   const [step, setStep] = useState<number>(1)
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(false);
-  const [funds, setFunds] = useState<number | string>(0)
+  const [funds, setFunds] = useState<number | string>(0.003)
   const [notificationText, setNotificaitonText] = useState<string>('')
   const [heroClass, setHeroClass] = useState<number>(0)
   const [showNotification, setShowNotification] = useState<boolean>(false);
@@ -92,17 +92,18 @@ export const CreateHero: React.FC = () => {
 
   const createHero = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
-    const accounts = await provider.listAccounts();
-    const signer = provider.getSigner(accounts[0]);
-    const valueToRecharge: BigNumber = ethers.utils.parseEther(funds.toString());
     if (!provider) {
+
       console.error('Ethereum provider not available.');
       return;
     }
     try {
+      const accounts = await provider.listAccounts();
+      const signer = provider.getSigner(accounts[0]);
+      const valueToRecharge: BigNumber = ethers.utils.parseEther(funds.toString());
       setIsLoading(true);
       const heroesCitadelContract = new Contract(ContractABI.address, ContractABI.abi, signer);
-      const tx = await heroesCitadelContract.createHero(characterName, signer._address, heroClass, [attack], [health], { value: valueToRecharge, gasLimit: 150000 });
+      const tx = await heroesCitadelContract.createHero(characterName, signer._address, heroClass, [attack], [health], { value: valueToRecharge });
       await tx.wait();
       setIsLoading(false);
       navigate('/battle-station')
