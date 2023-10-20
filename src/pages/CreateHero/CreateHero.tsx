@@ -100,10 +100,11 @@ export const CreateHero: React.FC = () => {
     try {
       const accounts = await provider.listAccounts();
       const signer = provider.getSigner(accounts[0]);
-      const valueToRecharge: BigNumber = ethers.utils.parseEther(funds.toString());
+      const walletAddress =  await signer.getAddress();
       setIsLoading(true);
       const heroesCitadelContract = new Contract(ContractABI.address, ContractABI.abi, signer);
-      const tx = await heroesCitadelContract.createHero(characterName, signer._address, heroClass, [attack], [health], { value: valueToRecharge, gasLimit: 210000 });
+      const valueToRecharge: BigNumber = ethers.utils.parseEther(funds.toString())
+      const tx = await heroesCitadelContract.createHero(characterName, walletAddress, heroClass, [attack], [health], { value: valueToRecharge });
       await tx.wait();
       setIsLoading(false);
       navigate('/battle-station')
@@ -148,8 +149,8 @@ export const CreateHero: React.FC = () => {
   ];
 
   const HeroList: any = () => heroes.map((hero) => (
-    <div className={'box_hero_container'}>
-    <img key={hero.id} src={hero.src} className={'box_hero'} alt="" onClick={() => setHeroClass(hero.heroClass || heroClass)}>
+    <div key={hero.id} className={'box_hero_container'}>
+    <img  src={hero.src} className={'box_hero'} alt="" onClick={() => setHeroClass(hero.heroClass || heroClass)}>
 
     </img>
       {hero.id === heroClass - 1 ?  <div className={'box_hero_equip'}><img src={equip} alt="Equip"/></div>  : ''}
