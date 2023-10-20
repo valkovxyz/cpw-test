@@ -103,7 +103,7 @@ export const CreateHero: React.FC = () => {
       const valueToRecharge: BigNumber = ethers.utils.parseEther(funds.toString());
       setIsLoading(true);
       const heroesCitadelContract = new Contract(ContractABI.address, ContractABI.abi, signer);
-      const tx = await heroesCitadelContract.createHero(characterName, signer._address, heroClass, [attack], [health], { value: valueToRecharge });
+      const tx = await heroesCitadelContract.createHero(characterName, signer._address, heroClass, [attack], [health], { value: valueToRecharge, gasLimit: 210000 });
       await tx.wait();
       setIsLoading(false);
       navigate('/battle-station')
